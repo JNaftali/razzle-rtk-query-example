@@ -12,7 +12,7 @@ export default function Home() {
       <ul>
         {data &&
           data.map((pokemon: any) => (
-            <li>
+            <li key={pokemon.name}>
               <Link to={pokemon.name}>{pokemon.name}</Link>
             </li>
           ))}
