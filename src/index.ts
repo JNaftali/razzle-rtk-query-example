@@ -1,6 +1,7 @@
 import express from 'express';
 
 let app = require('./server').default;
+require('isomorphic-fetch');
 
 if (module.hot) {
   module.hot.accept('./server', () => {

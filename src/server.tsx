@@ -2,6 +2,8 @@ import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
+import { store } from './store';
+import { pokemonApi } from './services/pokemon';
 
 import App from './App';
 
@@ -15,12 +17,16 @@ syncLoadAssets();
 const server = express()
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
-  .get('/*', (req: express.Request, res: express.Response) => {
+  .get('/*', async (req: express.Request, res: express.Response) => {
+    await store.dispatch(
+      pokemonApi.endpoints.getPokemonByName.initiate('bulbasaur'),
+    );
+
     const context = {};
     const markup = renderToString(
       <StaticRouter context={context} location={req.url}>
         <App />
-      </StaticRouter>
+      </StaticRouter>,
     );
     res.send(
       `<!doctype html>
@@ -43,8 +49,9 @@ const server = express()
     </head>
     <body>
         <div id="root">${markup}</div>
+        <div id="redux">${JSON.stringify(store.getState())}</div>
     </body>
-</html>`
+</html>`,
     );
   });
 
