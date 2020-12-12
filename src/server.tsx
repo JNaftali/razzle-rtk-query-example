@@ -18,9 +18,7 @@ const server = express()
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
   .get('/*', async (req: express.Request, res: express.Response) => {
-    await store.dispatch(
-      pokemonApi.endpoints.getPokemonByName.initiate('bulbasaur'),
-    );
+    await store.dispatch(pokemonApi.endpoints.getPokemonList.initiate(''));
 
     const context = {};
     const markup = renderToString(
@@ -49,7 +47,7 @@ const server = express()
     </head>
     <body>
         <div id="root">${markup}</div>
-        <div id="redux">${JSON.stringify(store.getState())}</div>
+        <div id="redux" hidden>${JSON.stringify(store.getState())}</div>
     </body>
 </html>`,
     );
