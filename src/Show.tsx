@@ -4,11 +4,12 @@ import { useGetPokemonByNameQuery } from './services/pokemon';
 
 export default function Show() {
   const { pokemon }: { pokemon: string } = useParams();
-  const { data } = useGetPokemonByNameQuery(pokemon);
+  const { data, isLoading } = useGetPokemonByNameQuery(pokemon);
 
   return (
     <div>
       <Link to="/">Go back home</Link>
+      {isLoading && <span>Loading</span>}
       {data && (
         <>
           <h1>{data.name}</h1>
