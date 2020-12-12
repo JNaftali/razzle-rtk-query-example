@@ -26,6 +26,9 @@ const server = express()
         pokemonApi.endpoints.getPokemonByName.initiate(pokemonName),
       );
     }
+    console.log(
+      pokemonApi.endpoints.getPokemonList.select('')(store.getState()),
+    );
     const context = {};
     const markup = renderToString(
       <StaticRouter context={context} location={req.url}>
