@@ -1,16 +1,17 @@
+import fetch, { Headers, Request, Response } from 'node-fetch';
+import AbortController from 'abort-controller';
+
+global.fetch = fetch as any;
+global.Headers = Headers as any;
+global.Request = Request as any;
+global.Response = Response as any;
+global.AbortController = AbortController;
 import { createApi, fetchBaseQuery } from '@rtk-incubator/rtk-query';
 
 // Define a service using a base URL and expected endpoints
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
-  // baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }), // uncomment for brokenness repro ur welcome :)
-  baseQuery: async (baseUrl, prepareHeaders, ...rest) => {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/${baseUrl}`,
-      ...rest,
-    );
-    return { data: await response.json() };
-  },
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }), // uncomment for brokenness repro ur welcome :)
   endpoints: (builder) => ({
     getPokemonByName: builder.query({
       query: (name: string) => `pokemon/${name}`,
