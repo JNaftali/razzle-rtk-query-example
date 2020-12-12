@@ -19,7 +19,13 @@ const server = express()
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
   .get('/*', async (req: express.Request, res: express.Response) => {
     await store.dispatch(pokemonApi.endpoints.getPokemonList.initiate(''));
-
+    const nameMatch = req.url.match(/^\/(\w+)$/);
+    if (nameMatch) {
+      const pokemonName = nameMatch[1];
+      await store.dispatch(
+        pokemonApi.endpoints.getPokemonByName.initiate(pokemonName),
+      );
+    }
     const context = {};
     const markup = renderToString(
       <StaticRouter context={context} location={req.url}>
